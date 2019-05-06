@@ -32,13 +32,13 @@ class DietTest(TestCase):
         diet.settings.DIET_JPEGTRAN = True
         self.assertEqual(
             diet.squeeze_jpeg(),
-            (u"jpegtran -copy none -progressive -optimize -outfile '%(file)s'.diet '%(file)s' "
+            ("jpegtran -copy none -progressive -optimize -outfile '%(file)s'.diet '%(file)s' "
                 "&& mv '%(file)s.diet' '%(file)s'")
         )
 
         diet.settings.DIET_JPEGOPTIM = True
         diet.settings.DIET_JPEGTRAN = False
-        self.assertEqual(diet.squeeze_jpeg(), u"jpegoptim -f --strip-all '%(file)s'")
+        self.assertEqual(diet.squeeze_jpeg(), "jpegoptim -f --strip-all '%(file)s'")
 
     def test_squeeze_png(self):
         diet.settings.DIET_OPTIPNG = False
@@ -49,33 +49,33 @@ class DietTest(TestCase):
         diet.settings.DIET_OPTIPNG = True
         diet.settings.DIET_ADVPNG = False
         diet.settings.DIET_PNGCRUSH = False
-        self.assertEqual(diet.squeeze_png(), u"optipng -force -o7 '%(file)s'")
+        self.assertEqual(diet.squeeze_png(), "optipng -force -o7 '%(file)s'")
 
         diet.settings.DIET_OPTIPNG = False
         diet.settings.DIET_ADVPNG = True
         diet.settings.DIET_PNGCRUSH = False
-        self.assertEqual(diet.squeeze_png(), u"advpng -z4 '%(file)s'")
+        self.assertEqual(diet.squeeze_png(), "advpng -z4 '%(file)s'")
 
         diet.settings.DIET_OPTIPNG = False
         diet.settings.DIET_ADVPNG = False
         diet.settings.DIET_PNGCRUSH = True
         self.assertEqual(
             diet.squeeze_png(),
-            (u"pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB "
-             u"-rem time '%(file)s' '%(file)s.diet' "
-             u"&& mv '%(file)s.diet' '%(file)s'")
+            ("pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB "
+             "-rem time '%(file)s' '%(file)s.diet' "
+             "&& mv '%(file)s.diet' '%(file)s'")
         )
 
         diet.settings.DIET_OPTIPNG = True
         diet.settings.DIET_ADVPNG = True
         diet.settings.DIET_PNGCRUSH = False
-        self.assertEqual(diet.squeeze_png(), u"optipng -force -o7 '%(file)s' && advpng -z4 '%(file)s'")
+        self.assertEqual(diet.squeeze_png(), "optipng -force -o7 '%(file)s' && advpng -z4 '%(file)s'")
 
     def test_squeeze_gif(self):
         diet.settings.DIET_GIFSICLE = True
         self.assertEqual(
             diet.squeeze_gif(),
-            (u"gifsicle -O2 b'%(file)s' > '%(file)s'.diet "
+            ("gifsicle -O2 b'%(file)s' > '%(file)s'.diet "
                 "&& mv '%(file)s.diet' '%(file)s'")
         )
 
@@ -94,4 +94,4 @@ class DietTest(TestCase):
             self.assertEqual(new_path, self.test_image_path)
             self.assertTrue(new_size < old_size)
         else:
-            print "Install jpegtran or jpegoptim to test shrinking"
+            print("Install jpegtran or jpegoptim to test shrinking")

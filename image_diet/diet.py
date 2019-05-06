@@ -13,8 +13,8 @@ def squeeze_jpeg():
     if not settings.DIET_JPEGTRAN and not settings.DIET_JPEGOPTIM:  # Can't do anything
         return ""
     if not settings.DIET_JPEGTRAN:
-        return u"jpegoptim -f --strip-all '%(file)s'"
-    return (u"jpegtran -copy none -progressive -optimize -outfile '%(file)s'.diet '%(file)s' "
+        return "jpegoptim -f --strip-all '%(file)s'"
+    return ("jpegtran -copy none -progressive -optimize -outfile '%(file)s'.diet '%(file)s' "
             "&& mv '%(file)s.diet' '%(file)s'")
 
 
@@ -22,21 +22,21 @@ def squeeze_gif():
     '''Gifsicle only optimizes animations.
 
     Eventually add support to change gifs to png8.'''
-    return (u"gifsicle -O2 '%(file)s' > '%(file)s'.diet "
+    return ("gifsicle -O2 '%(file)s' > '%(file)s'.diet "
             "&& mv '%(file)s.diet' '%(file)s'") if settings.DIET_GIFSICLE else ""
 
 
 def squeeze_png():
     commands = []
     if settings.DIET_OPTIPNG:
-        commands.append(u"optipng -force -o7 '%(file)s'")
+        commands.append("optipng -force -o7 '%(file)s'")
     if settings.DIET_ADVPNG:
-        commands.append(u"advpng -z4 '%(file)s'")
+        commands.append("advpng -z4 '%(file)s'")
     if settings.DIET_PNGCRUSH:
         commands.append(
-            (u"pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB "
-             u"-rem time '%(file)s' '%(file)s.diet' "
-             u"&& mv '%(file)s.diet' '%(file)s'")
+            ("pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB "
+             "-rem time '%(file)s' '%(file)s.diet' "
+             "&& mv '%(file)s.diet' '%(file)s'")
         )
     return " && ".join(commands)
 
